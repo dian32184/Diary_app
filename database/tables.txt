@@ -1,0 +1,11 @@
+CREATE DATABASE diary_app;
+
+USE diary_app;
+
+CREATE TABLE IF NOT EXISTS diary (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    status BOOLEAN NOT NULL
+);
+
