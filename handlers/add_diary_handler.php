@@ -1,31 +1,30 @@
 <?php
-
 include "../database/database.php";
 
 try {
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         // Validate input
         $title = trim($_POST['title']);
-        $content = trim($_POST['content']); // Changed to 'content'
+        $content = trim($_POST['content']);
 
         if (empty($title) || empty($content)) {
             echo "Title and content cannot be empty.";
             exit;
         }
 
-        // Prepare the SQL statement without user_id
+        // Prepare the SQL statement
         $stmt = $conn->prepare("INSERT INTO entries (title, content) VALUES (?, ?)");
 
-        // Check if the statement was prepared successfully
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $conn->error);
         }
 
-        // Bind parameters (removed user_id)
-        $stmt->bind_param("ss", $title, $content); // Updated binding
+        // Bind parameters
+        $stmt->bind_param("ss", $title, $content);
 
         // Execute the statement
         if ($stmt->execute()) {
+            // Redirect to the index page after successful insertion
             header("Location: ../index.php");
             exit;
         } else {
@@ -36,5 +35,11 @@ try {
         $stmt->close();
     }
 } catch (Exception $e) {
+    // Display the error message
     echo "Error: " . $e->getMessage();
-}
+} finally {
+    // Close the database connection if it was established
+    if ($conn) {
+        $conn->close();
+    }
+} 
