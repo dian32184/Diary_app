@@ -6,7 +6,7 @@ try {
     $password = "";
     $database = "diary_app"; // Updated database name
 
-    $conn = new mysqli($host, $username, $password, $database);
+    $conn = new mysqli($host, $username, $password, $database); 
 
     if ($conn->connect_error) {
         die("Database connection unsuccessful: " . $conn->connect_error);
