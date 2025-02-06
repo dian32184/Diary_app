@@ -8,7 +8,7 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === "POST") {
         // Get and validate input
         $title = trim($_POST['title']);
-        $content = trim($_POST['content']); // Changed to 'content'
+        $content = trim($_POST['content']);
         $id = (int)$_POST['id'];
 
         // Validate required fields
@@ -25,7 +25,7 @@ try {
         }
 
         // Bind the parameters
-        $stmt->bind_param("ssi", $title, $content, $id); // Updated binding
+        $stmt->bind_param("ssi", $title, $content, $id);
 
         // Execute the statement
         if ($stmt->execute()) {
