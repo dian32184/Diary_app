@@ -4,10 +4,15 @@ include "../database/database.php";
 // Function to get the next available ID
 function getNextAvailableId($conn) {
     $result = $conn->query("SELECT MIN(id) AS min_id FROM entries");
-    $row = $result->fetch_assoc();
     
+    if (!$result) {
+        die('Query Error: ' . $conn->error);
+    }
+
+    $row = $result->fetch_assoc();
     $minId = $row['min_id'];
 
+    // If there are no entries, start from ID 1
     if ($minId === null) {
         return 1;
     }
@@ -16,6 +21,11 @@ function getNextAvailableId($conn) {
 
     while (true) {
         $check = $conn->query("SELECT id FROM entries WHERE id = $nextId");
+        
+        if (!$check) {
+            die('Query Error: ' . $conn->error);
+        }
+        
         if ($check->num_rows == 0) {
             return $nextId;
         }
@@ -25,21 +35,29 @@ function getNextAvailableId($conn) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['title'];
-    $content = $_POST['content'];
+    $title = $conn->real_escape_string($_POST['title']);
+    $content = $conn->real_escape_string($_POST['content']);
     
     $nextId = getNextAvailableId($conn);
 
     $stmt = $conn->prepare("INSERT INTO entries (id, title, content) VALUES (?, ?, ?)");
+    
+    if (!$stmt) {
+        die('Prepare Error: ' . $conn->error);
+    }
+
     $stmt->bind_param("iss", $nextId, $title, $content);
-    $stmt->execute();
+    
+    if (!$stmt->execute()) {
+        die('Execute Error: ' . $stmt->error);
+    }
+    
     $stmt->close();
 
     header("Location: ../index.php");
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
