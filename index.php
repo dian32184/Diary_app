@@ -16,11 +16,11 @@ include 'database/database.php'; // Include the database connection
 <body>
     <div class="container d-flex justify-content-center mt-5">
       <div class="col-6">
-        <div class="row text-center"> <!-- Centered the text -->
+        <div class="row text-center">
           <p class="display-5 fw-bold">Diary App</p>
         </div>
         <div class="row mb-3">
-          <a href="views/add_entry.php" class="btn btn-outline-dark btn-sm">Add Diary Entry</a> <!-- Updated link -->
+          <a href="views/add_entry.php" class="btn btn-outline-dark btn-sm">Add Diary Entry</a>
         </div>
 
         <?php
@@ -35,14 +35,14 @@ include 'database/database.php'; // Include the database connection
             <?php while($row = $res->fetch_assoc()): ?>
             <div class="row border rounded p-3 my-3">
                 <div>
-                <h5 class="fw-bold"><?= htmlspecialchars($row['title']); ?> <small class="text-muted">(<?= htmlspecialchars($row['date_added']); ?>)</small></h5> 
-                <p class="text-secondary"><?= htmlspecialchars($row['content']); ?></p>
-                <div class="row my-1">
-                    <a href="views/update_diary.php?id=<?= urlencode($row['id']); ?>" class="btn btn-sm btn-warning">Edit</a>
-                </div>
-                <div class="row my-1">
-                <a href="handlers/delete_diary_handler.php?id=<?= urlencode($row['id']); ?>" class="btn btn-sm btn-danger">Delete</a>
-                </div>
+                    <h5 class="fw-bold"><?= htmlspecialchars($row['title']); ?> 
+                        <small class="text-muted">(<?= htmlspecialchars($row['date_added']); ?>)</small>
+                    </h5> 
+                    <p class="text-secondary"><?= nl2br(htmlspecialchars($row['content'])); ?></p>
+                    <div class="row my-1">
+                        <a href="views/update_diary.php?id=<?= urlencode($row['id']); ?>" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="handlers/delete_diary_handler.php?id=<?= urlencode($row['id']); ?>" class="btn btn-sm btn-danger ms-2">Delete</a>
+                    </div>
                 </div>
             </div>
             <?php endwhile; ?>
